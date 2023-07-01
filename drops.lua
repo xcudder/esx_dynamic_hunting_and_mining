@@ -54,14 +54,12 @@ function createOrGetDrop(drop_type, ped)
 	
 	-- add stash to globalss
 	current_drop = hypothetical_drop
-	all_drops[current_drop.id] = hypothetical_drop
-	print("Created: " .. json.encode(stash_identifier))
+	all_drops[drop_id] = hypothetical_drop
 end
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(5000)
-		print("Looking for dead peds")
+		Wait(1000)
 		for _,ped in ipairs(GetGamePool('CPed')) do
 			if IsPedDeadOrDying(ped) and isPedCloseToPlayer(ped) then
 				if GetPedType(ped) == 28 then
@@ -87,17 +85,20 @@ Citizen.CreateThread(function()
 	local done = false
 	while true do
 		Wait(0)
-		if current_drop.stash_identifier then
-			DisplayHelpText(current_drop.prompt)
-			if(IsControlJustReleased(1, 38)) then
-				Citizen.CreateThread(function()
-					TaskPlayAnim(PlayerPedId(), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, 1000, 1, 0, false, false, false )
-					TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, 1000, 48, 0, false, false, false )
-				end)
-				Wait(2000)
-				print("Trying to open " .. current_drop.stash_identifier)
-				exports.ox_inventory:openInventory('stash', current_drop.stash_identifier)
-			end
+		if current_drop.stash_identifier then DisplayHelpText(current_drop.prompt) end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(0)
+		if(IsControlJustReleased(1, 38) and current_drop.stash_identifier) then
+			Citizen.CreateThread(function()
+				TaskPlayAnim(PlayerPedId(), "amb@medic@standing@kneel@base" ,"base" ,8.0, -8.0, 1000, 1, 0, false, false, false )
+				TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, 1000, 48, 0, false, false, false )
+			end)
+			Wait(2000)
+			exports.ox_inventory:openInventory('stash', current_drop.stash_identifier)
 		end
 	end
 end)
