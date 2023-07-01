@@ -28,6 +28,20 @@ local drop = {
 	}
 }
 
+function getMorePreciseItemsForAnimalSize(ped)
+	local model = GetEntityModel(ped)
+	if model == 0xD86B5A95 then return {{'meat', 5}, {'hide', 5}} end -- deer
+	if model == 0xDFB55C81 then return {{'meat', 2}} end -- rabbit
+	if model == 0xD3939DFD then return {{'meat', 2}} end -- seagul
+	if model == 0xB11BAB56 then return {{'meat', 2}, {'hide', 2}} end -- pig
+	if model == 0x1250D7BA then return {{'meat', 3}, {'hide', 10}} end -- mountain lion
+	if model == 0x6AF51FAF then return {{'meat', 2}} end -- hen
+	if model == 0xFCFA9E1E then return {{'meat', 5}, {'hide', 5}} end -- cow
+	if model == 0x644AC75E then return {{'meat', 3}, {'hide', 3}} end -- coyote
+	if model == 0xCE5FF074 then return {{'meat', 3}, {'hide', 3}} end -- boar
+	return {{'meat', 2}}
+end
+
 RequestAnimSet('amb@medic@standing@kneel@base')
 RequestAnimSet('anim@gangops@facility@servers@bodysearch@')
 
@@ -45,6 +59,11 @@ function createOrGetDrop(drop_type, ped)
 
 	-- Create new stash
 	hypothetical_drop = drop[drop_type]
+
+	if drop_type == 'animal_drop' then
+		hypothetical_drop['items'] = getMorePreciseItemsForAnimalSize(ped)
+	end
+
 	hypothetical_drop['ped'] = ped
 	hypothetical_drop['coords'] = GetEntityCoords(ped)
 
