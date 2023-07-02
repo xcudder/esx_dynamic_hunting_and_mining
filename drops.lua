@@ -117,7 +117,12 @@ Citizen.CreateThread(function()
 				TaskPlayAnim(PlayerPedId(), "anim@gangops@facility@servers@bodysearch@" ,"player_search" ,8.0, -8.0, 1000, 48, 0, false, false, false )
 			end)
 			Wait(2000)
-			exports.ox_inventory:openInventory('stash', current_drop.stash_identifier)
+			ClearPedTasksImmediately(PlayerPedId())
+			if GetSelectedPedWeapon(PlayerPedId()) ~= GetHashKey('WEAPON_KNIFE') and current_drop.label == 'animal_carcass_' then
+				ESX.ShowNotification('You need a knife to slaugther this beast!')
+			else
+				exports.ox_inventory:openInventory('stash', current_drop.stash_identifier)
+			end
 		end
 	end
 end)
