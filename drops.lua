@@ -31,6 +31,7 @@ local drop = {
 function getMorePreciseItemsForAnimalSize(ped)
 	local model = GetEntityModel(ped)
 	if model == 0xD86B5A95 then return {{'meat', 5}, {'hide', 5}} end -- deer
+	if model == 0xAA4B67D0 then return {{'meat', 5}, {'hide', 5}} end -- deer
 	if model == 0xDFB55C81 then return {{'meat', 2}} end -- rabbit
 	if model == 0xD3939DFD then return {{'meat', 2}} end -- seagul
 	if model == 0xB11BAB56 then return {{'meat', 2}, {'hide', 2}} end -- pig
